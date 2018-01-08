@@ -1,0 +1,35 @@
+<!--ng-sticky [offSet]="0" [addClass]="'is-sticky'"-->
+<div class="yourOrderSection" >
+    <h3>Your Order</h3>
+
+
+    <table class="table" *ngIf="cart" >
+        <tbody>
+            <tr *ngFor="let data of cart; let i = index" >
+                <td>
+                    <img src="/assets/img/{{data.image}}" height="50" width="50">
+
+                </td>
+                <td ><span>{{data.name}}<br>
+                        ${{data.cost}} </span>
+                <span *ngIf="data.unit==1">lb </span>
+                <span *ngIf="data.unit==2">cs </span>
+
+                <span> x{{data.qty}}</span>
+                </td>
+
+                <td>${{data.totalcost}}</td>
+
+
+
+            </tr>
+            <tr *ngIf="cart.length > 0">
+                <td colspan="2">Total</td>
+                <td>${{total}}</td>
+            </tr>
+       </tbody>
+    </table>
+    
+    <p *ngIf="cart.length == 0">No item in the cart.</p>
+
+    </div>

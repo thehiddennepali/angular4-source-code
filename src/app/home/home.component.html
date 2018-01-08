@@ -1,0 +1,126 @@
+
+<app-banner></app-banner>
+    
+   
+    
+
+    <div class="container">
+        
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-9">
+            <div class="productSection" id="shop">
+            
+            <h2>Products</h2>
+            
+                
+                    <form  action="/action_page.php" class="formSection">
+                        <div class="row">
+                        <div class="col-sm-9">
+
+                            <input type="text" class="form-control"  name="name" placeholder="Search...." [(ngModel)]="term" #name="ngModel">
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="password" class="form-control" id="pwd" placeholder="Select Category">
+                        </div>
+                            </div>
+                    </form>
+                    
+               
+            
+            <table class="table" *ngIf="products" >
+              <tbody>
+                  <tr *ngFor="let data of products.results |filter:term; let i = index " >
+                      <td>
+                          <img src="/assets/img/{{data.image}}" height="50" width="50">
+                          
+                      </td>
+                      <td ><a href="javascript:void(0)" (click)="open(content, i)">{{data.generic_item_code}}</a><br>{{data.organic}}</td>
+                      <td>
+                          <span *ngIf="data.unit==1">1</span>
+                          <span *ngIf="data.unit==2">{{data.unit_size}}lb</span>
+                            
+                            <select [(ngModel)]="data.unit" (ngModelChange)="changeunit(i)"  class="form-control-select navselect">
+                                <option  [value]="1">lb</option>
+                                <option  [value]="2" *ngIf="data.unit_size > 1">cs</option>
+                            </select>
+                          
+                         
+                          <br><small>{{data.supplier}}</small>
+                      </td>
+                      
+                      <td *ngIf="data.unit==1">${{data.price_per_lb_whole_case}}</td>
+                      <td *ngIf="data.unit==2">${{data.price_per_whole_case}}</td>
+
+                      <td>
+                          
+                          <div class="productQty">
+                              <button (click)="deleteCart(i)">
+                                  <i class="glyphicon glyphicon-minus">  </i>
+                              </button>
+                                  <input type="text" [value]="data.qty" size="2" [(ngModel)]="data.qty">
+                              <button  (click)="addtocart(i)" > 
+                                  <i class="glyphicon glyphicon-plus">  </i> 
+                              </button>
+                              </div><!-- End of productQty -->
+                          
+
+                      </td>
+
+                  </tr>
+             </tbody>
+          </table>
+            
+            </div> 
+         
+        </div>
+        <div class="col-md-3">
+            <app-cart [cart]="cart" [total]="total"></app-cart>
+        </div>
+        
+      </div>
+      <app-about></app-about>
+      <app-farm></app-farm>
+        <app-client></app-client>
+
+      
+    </div> <!-- /container -->
+    
+    
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Product Detail</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true" >&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p><img src="/assets/img/{{product.image}}" width="100" height="100"></p>
+        <h4>{{product.generic_item_code}}</h4>
+        <p>{{product.organic}}</p>
+        <p>{{product.supplier}}</p>
+        <p style="width: 100%; overflow: hidden;">
+            <span style="float:left !important; margin-right: 10px;">{{product.unit_size}}</span>
+             <select [(ngModel)]="product.unit" (ngModelChange)="changeunit(product.index)"  class="form-control-select"  style="width: 150px !important; float:left !important" >
+                                <option  [value]="1">lb</option>
+                                <option  [value]="2" *ngIf="product.unit_size > 1">cs</option>
+                            </select>
+        </p>
+        
+        <h5 *ngIf="product.unit==1">${{product.price_per_lb_whole_case}}</h5>
+        <h5 *ngIf="product.unit==2">${{product.price_per_whole_case}}</h5>
+        <div class="productQty">
+            <button (click)="deleteCart(product.index)">
+                <i class="glyphicon glyphicon-minus">  </i>
+            </button>
+                <input type="text"  [value]="product.qty" size="2">
+            <button  (click)="addtocart(product.index)"> 
+                <i class="glyphicon glyphicon-plus">  </i> 
+            </button>
+        </div>
+    </div>
+    
+</ng-template>
+
+    
+    
